@@ -189,6 +189,54 @@ include_dirs:
   - "lib/*/include"
 ```
 
+### RefactorErl integration
+
+Erlang LS now can integrate with RefactorErl and display its diagnostics. The following page will help you with the setup and give you some feature highlight.
+
+
+**What you need**
+ - Erlang LS version: 0.29.0
+ - RefactorErl: [download](https://plc.inf.elte.hu/erlang/)
+
+
+**How to set it up**
+
+RefactorErl is like any other diagnostics in ELS, just it is computed outside of it. To enable you need to enable it in the config file of ELS.
+To learn more about how to config Erlang LS visit: [ELS Configuration](https://erlang-ls.github.io/configuration/)
+
+```
+diagnostics:
+  enabled:
+    - refactorerl
+```
+
+Some extra configuration is needed as the diagnostics are computed on the RefactorErl node.
+You need to add a new root entry to diagnostic file, containing the node's name where RefactorErl is running. (you must start the tool in distributed mode)
+
+```
+refactorerl:
+  node: "nodeName@hostName" 		
+```
+
+By default all of the diagnostics are disabled, even if the tool is enabled as an Erlang LS diagnostic. You need to enable certain diagnostics manually.
+You need to create a new entry under node and tell the system which diagnostics you wish to run. See the currently supported diagnostics and the IDs of them below.
+You should have something similar in you config file:
+
+```
+diagnostics:
+  enabled:
+    - refactorerl
+
+refactorerl:
+  node: "nodeName@hostName" 		
+  diagnostics:
+    - "unused_macros"			
+    - "unsecure_os_call"
+```
+
+Available diagnostics are listed on the [RefactorErl Wiki page](http://pnyf.inf.elte.hu/trac/refactorerl/wiki/els)
+
+
 [compiler]:https://erlang.org/doc/man/compile.html
 [dialyzer]:http://erlang.org/doc/apps/dialyzer/dialyzer_chapter.html
 [elvis]:https://github.com/inaka/elvis
